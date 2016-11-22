@@ -25,15 +25,15 @@ class Character:
     # -------------------------------------------------------------------
     #
     # -------------------------------------------------------------------
-    def __init__(self, c, lineIndex, colIndex, sourceIndex, sourceText):
+    def __init__(self, char, line_index, column_index, source_index, source_text):
         """
         In Python, the __init__ method is the constructor.
         """
-        self.cargo = c
-        self.sourceIndex = sourceIndex
-        self.lineIndex = lineIndex
-        self.colIndex = colIndex
-        self.sourceText = sourceText
+        self.char = char
+        self.sourceIndex = source_index
+        self.line_index = line_index
+        self.column_index = column_index
+        self.source_text = source_text
 
     # -------------------------------------------------------------------
     # return a displayable string representation of the Character object
@@ -43,7 +43,7 @@ class Character:
         In Python, the __str__ method returns a string representation
         of an object.  In Java, this would be the toString() method.
         """
-        cargo = self.cargo
+        cargo = self.char
         if cargo == " ":
             cargo = "   space"
         elif cargo == "\n":
@@ -54,8 +54,8 @@ class Character:
             cargo = "   eof"
 
         return (
-            str(self.lineIndex).rjust(6)
-            + str(self.colIndex).rjust(4)
+            str(self.line_index).rjust(6)
+            + str(self.column_index).rjust(4)
             + "  "
             + cargo
         )

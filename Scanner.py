@@ -1,76 +1,77 @@
-#fragment start *
-#fragment start 1
+# fragment start *
+# fragment start 1
 from Character import *
 
 """
 A Scanner object reads through the sourceText
 and returns one character at a time.
 """
-#-------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------
 #
-#-------------------------------------------------------------------
-def initialize(sourceTextArg):
-	global sourceText, lastIndex, sourceIndex, lineIndex, colIndex
-	sourceText = sourceTextArg
-	lastIndex    = len(sourceText) - 1
-	sourceIndex  = -1
-	lineIndex    =  0
-	colIndex     = -1
+# -------------------------------------------------------------------
+class Scanner:
+    def __init__(self, source_text_arg):
+        self.source_text = source_text_arg
+        self.last_index = len(self.source_text) - 1
+        self.source_index = -1
+        self.line_index = 0
+        self.column_index = -1
+
+    # -------------------------------------------------------------------
+    #
+    # -------------------------------------------------------------------
+    def get(self):
+        """
+        Return the next character in sourceText.
+        """
+
+        self.source_index += 1  # increment the index in sourceText
+
+        # maintain the line count
+        if self.source_index > 0:
+            if self.source_text[self.source_index - 1] == "\n":
+                # -------------------------------------------------------
+                # The previous character in sourceText was a newline
+                # character.  So... we're starting a new line.
+                # Increment lineIndex and reset colIndex.
+                # -------------------------------------------------------
+                self.line_index += 1
+                self.column_index = -1
+
+        self.column_index += 1
+
+        if self.source_index > self.last_index:
+            # We've read past the end of sourceText.
+            # Return the ENDMARK character.
+            char = Character(ENDMARK, self.line_index, self.column_index, self.source_index, self.source_text)
+        else:
+            c = self.source_text[self.source_index]
+            char = Character(c, self.line_index, self.column_index, self.source_index, self.source_text)
+
+        return char
+
+    # fragment stop  1
 
 
-#-------------------------------------------------------------------
-#
-#-------------------------------------------------------------------
-def get():
-	"""
-	Return the next character in sourceText.
-	"""
-	global lastIndex, sourceIndex, lineIndex, colIndex
+    # fragment start 2
+    # -------------------------------------------------------------------
+    #
+    # -------------------------------------------------------------------
+    def lookahead(self, offset=1):
+        """
+        Return a string (not a Character object) containing the character
+        at position:
+                sourceIndex + offset
+        Note that we do NOT move our current position in the sourceText.
+        That is,  we do NOT change the value of sourceIndex.
+        """
+        index = self.source_index + offset
 
-	sourceIndex += 1    # increment the index in sourceText
-
-	# maintain the line count
-	if sourceIndex > 0:
-		if sourceText[sourceIndex - 1] == "\n":
-			#-------------------------------------------------------
-			# The previous character in sourceText was a newline
-			# character.  So... we're starting a new line.
-			# Increment lineIndex and reset colIndex.
-			#-------------------------------------------------------
-			lineIndex +=1
-			colIndex  = -1
-
-	colIndex += 1
-
-	if sourceIndex > lastIndex:
-		# We've read past the end of sourceText.
-		# Return the ENDMARK character.
-		char = Character(ENDMARK, lineIndex, colIndex, sourceIndex,sourceText)
-	else:
-		c    = sourceText[sourceIndex]
-		char = Character(c, lineIndex, colIndex, sourceIndex, sourceText)
-
-	return char
-#fragment stop  1
-
-
-#fragment start 2
-#-------------------------------------------------------------------
-#
-#-------------------------------------------------------------------
-def lookahead(offset=1):
-	"""
-	Return a string (not a Character object) containing the character
-	at position:
-			sourceIndex + offset
-	Note that we do NOT move our current position in the sourceText.
-	That is,  we do NOT change the value of sourceIndex.
-	"""
-	index = sourceIndex + offset
-
-	if index > lastIndex:
-		# We've read past the end of sourceText.
-		# Return the ENDMARK character.
-		return ENDMARK
-	else:
-		return sourceText[index]
+        if index > self.last_index:
+            # We've read past the end of sourceText.
+            # Return the ENDMARK character.
+            return ENDMARK
+        else:
+            return self.source_text[index]

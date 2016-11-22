@@ -14,8 +14,8 @@ def writeln(*args):
 if __name__ == "__main__":
     outputFilename = "nxxParserDriver_output.txt"
     sourceFilename = "nxx1.txt"
-    sourceText = open(sourceFilename).read()
-    ast = parser.parse(sourceText, verbose=False)
+    source_text = open(sourceFilename).read()
+    ast = parser.parse(source_text, verbose=False)
     print("~" * 80)
     print("Here is the abstract syntax tree:")
     print("~" * 80)
