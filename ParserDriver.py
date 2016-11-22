@@ -1,5 +1,5 @@
 # fragment start *
-import nxxParser as parser
+import Parser as parser
 
 
 # -------------------------------------------------

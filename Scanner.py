@@ -1,6 +1,6 @@
 #fragment start *
 #fragment start 1
-from genericCharacter import *
+from Character import *
 
 """
 A Scanner object reads through the sourceText

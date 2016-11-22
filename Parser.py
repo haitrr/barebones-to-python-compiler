@@ -3,9 +3,9 @@
 A recursive descent parser for nxx1, 
 as defined in nxx1ebnf.txt
 """
-import nxxLexer as lexer
-from   nxxSymbols import *
-from   genericAstNode import Node
+import Lexer as lexer
+from   Symbols import *
+from   Node import Node
 
 
 class ParserError(Exception): pass

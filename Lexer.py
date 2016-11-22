@@ -3,9 +3,9 @@
 A lexer (aka: Tokenizer, Lexical Analyzer) for the imaginary language nxx
 """
 #fragment start   lexer0
-import genericScanner as scanner
-from   genericToken      import *
-from   nxxSymbols        import *
+import Scanner as scanner
+from   Token      import *
+from   Symbols        import *
 
 class LexerError(Exception): pass
 

@@ -1,6 +1,6 @@
 #fragment start *
 #fragment start 1
-from genericScanner import *
+from Scanner import *
 
 class LexerError(Exception): pass
 
