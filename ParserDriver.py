@@ -20,6 +20,6 @@ if __name__ == "__main__":
     print("Here is the abstract syntax tree:")
     print("~" * 80)
     f = open(outputFilename, "w")
-    f.write(ast.toString())
+    f.write(ast.to_string())
     f.close()
     print(open(outputFilename).read())

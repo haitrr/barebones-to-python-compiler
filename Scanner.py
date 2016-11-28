@@ -27,7 +27,7 @@ class Scanner:
         Return the next character in sourceText.
         """
 
-        self.source_index += 1  # increment the index in sourceText
+        self.source_index += 1  # increment the index in source_text
 
         # maintain the line count
         if self.source_index > 0:

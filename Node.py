@@ -9,23 +9,23 @@ class Node:
         """
         make a node out of a token and add it to self.children
         """
-        self.addNode(Node(token))
+        self.add_node(Node(token))
 
-    def addNode(self, node):
+    def add_node(self, node):
         """
         add a node to self.children
         """
         node.level = self.level + 1
         self.children.append(node)
 
-    def toString(self):
+    def to_string(self):
         s = "    " * self.level
 
-        if self.token == None:
+        if self.token is None:
             s += "ROOT\n"
         else:
             s += self.token.cargo + "\n"
 
         for child in self.children:
-            s += child.toString()
+            s += child.to_string()
         return s

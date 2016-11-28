@@ -3,9 +3,9 @@
 A recursive descent parser for nxx1, 
 as defined in nxx1ebnf.txt
 """
-import Lexer as lexer
-from   Symbols import *
-from   Node import Node
+from Lexer import Lexer
+from Symbols import *
+from Node import Node
 
 
 class ParserError(Exception): pass
@@ -23,7 +23,7 @@ numberOperator = ["+", "-", "/", "*"]
 # -------------------------------------------------------------------
 #
 # -------------------------------------------------------------------
-def getToken():
+def get_token():
     global token
     if verbose:
         if token:
@@ -39,7 +39,8 @@ def getToken():
 def push(s):
     global indent
     indent += 1
-    if verbose: print(("  " * indent) + " " + s)
+    if verbose:
+        print(("  " * indent) + " " + s)
 
 
 def pop(s):
@@ -84,11 +85,11 @@ def error(msg):
 # -------------------------------------------------------------------
 #        foundOneOf
 # -------------------------------------------------------------------
-def foundOneOf(argTokenTypes):
+def found_one_of(arg_token_types):
     """
     argTokenTypes should be a list of argTokenType
     """
-    for argTokenType in argTokenTypes:
+    for argTokenType in arg_token_types:
         # print "foundOneOf", argTokenType, token.type
         if token.type == argTokenType:
             return True
@@ -98,8 +99,8 @@ def foundOneOf(argTokenTypes):
 # -------------------------------------------------------------------
 #        found
 # -------------------------------------------------------------------
-def found(argTokenType):
-    if token.type == argTokenType:
+def found(arg_token_type):
+    if token.type == arg_token_type:
         return True
     return False
 
@@ -107,17 +108,17 @@ def found(argTokenType):
 # -------------------------------------------------------------------
 #       consume
 # -------------------------------------------------------------------
-def consume(argTokenType):
+def consume(arg_token_type):
     """
     Consume a token of a given type and get the next token.
     If the current token is NOT of the expected type, then
     raise an error.
     """
-    if token.type == argTokenType:
-        getToken()
+    if token.type == arg_token_type:
+        get_token()
     else:
         error("I was expecting to find "
-              + dq(argTokenType)
+              + dq(arg_token_type)
               + " but I found "
               + token.show(align=False)
               )
@@ -126,12 +127,12 @@ def consume(argTokenType):
 # -------------------------------------------------------------------
 #    parse
 # -------------------------------------------------------------------
-def parse(sourceText, **kwargs):
+def parse(source_text, **kwargs):
     global lexer, verbose
     verbose = kwargs.get("verbose", False)
     # create a Lexer object & pass it the sourceText
-    lexer.initialize(sourceText)
-    getToken()
+    lexer = Lexer(source_text)
+    get_token()
     program()
     if verbose:
         print("~" * 80)
@@ -170,9 +171,9 @@ assignmentStatement = variable "=" expression ";".
 printStatement      = "print" expression ";".
     """
     if found("print"):
-        printStatement(node)
+        print_statement(node)
     else:
-        assignmentStatement(node)
+        assignment_statement(node)
 
 
 # --------------------------------------------------------
@@ -190,50 +191,50 @@ numberOperator = "+" | "-" | "/" | "*" .
     """
 
     if found(STRING):
-        stringLiteral(node)
+        string_literal(node)
         while found("||"):
-            getToken()
-            stringExpression(node)
+            get_token()
+            string_expression(node)
 
     elif found(NUMBER):
-        numberLiteral(node)
-        while foundOneOf(numberOperator):
+        number_literal(node)
+        while found_one_of(numberOperator):
             node.add(token)
-            getToken()
-            numberExpression(node)
+            get_token()
+            number_expression(node)
     else:
         node.add(token)
         consume(IDENTIFIER)
 
         if found("||"):
             while found("||"):
-                getToken()
-                stringExpression(node)
-        elif foundOneOf(numberOperator):
-            while foundOneOf(numberOperator):
+                get_token()
+                string_expression(node)
+        elif found_one_of(numberOperator):
+            while found_one_of(numberOperator):
                 node.add(token)
-                getToken()
-                numberExpression(node)
+                get_token()
+                number_expression(node)
 
 
 # --------------------------------------------------------
 #                   assignmentStatement
 # --------------------------------------------------------
 @track
-def assignmentStatement(node):
+def assignment_statement(node):
     """
 assignmentStatement = variable "=" expression ";".
     """
-    identifierNode = Node(token)
+    identifier_node = Node(token)
     consume(IDENTIFIER)
 
-    operatorNode = Node(token)
+    operator_node = Node(token)
     consume("=")
-    node.addNode(operatorNode)
+    node.add_node(operator_node)
 
-    operatorNode.addNode(identifierNode)
+    operator_node.add_node(identifier_node)
 
-    expression(operatorNode)
+    expression(operator_node)
     consume(";")
 
 
@@ -241,16 +242,16 @@ assignmentStatement = variable "=" expression ";".
 #                   printStatement
 # --------------------------------------------------------
 @track
-def printStatement(node):
+def print_statement(node):
     """
 printStatement      = "print" expression ";".
     """
-    statementNode = Node(token)
+    statement_node = Node(token)
     consume("print")
 
-    node.addNode(statementNode)
+    node.add_node(statement_node)
 
-    expression(statementNode)
+    expression(statement_node)
 
     consume(";")
 
@@ -259,7 +260,7 @@ printStatement      = "print" expression ";".
 #                   stringExpression
 # --------------------------------------------------------
 @track
-def stringExpression(node):
+def string_expression(node):
     """
 /* "||" is the concatenation operator, as in PL/I */
 stringExpression =  (stringLiteral | variable) {"||" stringExpression}.
@@ -267,52 +268,52 @@ stringExpression =  (stringLiteral | variable) {"||" stringExpression}.
 
     if found(STRING):
         node.add(token)
-        getToken()
+        get_token()
 
         while found("||"):
-            getToken()
-            stringExpression(node)
+            get_token()
+            string_expression(node)
     else:
         node.add(token)
         consume(IDENTIFIER)
 
     while found("||"):
-        getToken()
-        stringExpression(node)
+        get_token()
+        string_expression(node)
 
 
 # --------------------------------------------------------
 #                   numberExpression
 # --------------------------------------------------------
 @track
-def numberExpression(node):
+def number_expression(node):
     """
 numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
 numberOperator = "+" | "-" | "/" | "*" .
     """
     if found(NUMBER):
-        numberLiteral(node)
+        number_literal(node)
     else:
         node.add(token)
         consume(IDENTIFIER)
 
-    while foundOneOf(numberOperator):
+    while found_one_of(numberOperator):
         node.add(token)
-        getToken()
-        numberExpression(node)
+        get_token()
+        number_expression(node)
 
 
 # --------------------------------------------------------
 #                   stringLiteral
 # --------------------------------------------------------
-def stringLiteral(node):
+def string_literal(node):
     node.add(token)
-    getToken()
+    get_token()
 
 
 # --------------------------------------------------------
 #                   numberLiteral
 # --------------------------------------------------------
-def numberLiteral(node):
+def number_literal(node):
     node.add(token)
-    getToken()
+    get_token()
