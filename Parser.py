@@ -8,7 +8,8 @@ from Symbols import *
 from Node import Node
 
 
-class ParserError(Exception): pass
+class ParserError(Exception):
+    pass
 
 
 def dq(s): return '"%s"' % s
