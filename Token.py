@@ -12,7 +12,7 @@ class LexerError(Exception):
 #               Token
 #
 # -----------------------------------------------------------------------
-class Token:
+class Token(object):
     """
     A Token object is the kind of thing that the Lexer returns.
     It holds:

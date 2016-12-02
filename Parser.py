@@ -90,9 +90,9 @@ def found_one_of(arg_token_types):
     """
     argTokenTypes should be a list of argTokenType
     """
-    for argTokenType in arg_token_types:
+    for arg_token_type in arg_token_types:
         # print "foundOneOf", argTokenType, token.type
-        if token.type == argTokenType:
+        if token.type == arg_token_type:
             return True
     return False
 
@@ -166,148 +166,76 @@ program = statement {statement} EOF.
 # --------------------------------------------------------
 @track
 def statement(node):
-    """
-statement = printStatement | assignmentStatement .
-assignmentStatement = variable "=" expression ";".
-printStatement      = "print" expression ";".
-    """
-    if found("print"):
-        print_statement(node)
+    if found("clear"):
+        clear_statement(node)
+    elif found("incr"):
+        incr_statement(node)
+    elif found("decr"):
+        decr_statement(node)
+    elif found("while"):
+        while_statement(node)
+    elif found("end"):
+        end_statement(node)
+    elif found("do"):
+        do_statement(node)
     else:
-        assignment_statement(node)
+        pass
 
 
-# --------------------------------------------------------
-#                   expression
-# --------------------------------------------------------
 @track
-def expression(node):
-    """
-expression = stringExpression | numberExpression.
-
-/* "||" is the concatenation operator, as in PL/I */
-stringExpression =  (stringLiteral | variable) {"||"            stringExpression}.
-numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
-numberOperator = "+" | "-" | "/" | "*" .
-    """
-
-    if found(STRING):
-        string_literal(node)
-        while found("||"):
-            get_token()
-            string_expression(node)
-
-    elif found(NUMBER):
-        number_literal(node)
-        while found_one_of(numberOperator):
-            node.add(token)
-            get_token()
-            number_expression(node)
-    else:
-        node.add(token)
-        consume(IDENTIFIER)
-
-        if found("||"):
-            while found("||"):
-                get_token()
-                string_expression(node)
-        elif found_one_of(numberOperator):
-            while found_one_of(numberOperator):
-                node.add(token)
-                get_token()
-                number_expression(node)
-
-
-# --------------------------------------------------------
-#                   assignmentStatement
-# --------------------------------------------------------
-@track
-def assignment_statement(node):
-    """
-assignmentStatement = variable "=" expression ";".
-    """
-    identifier_node = Node(token)
-    consume(IDENTIFIER)
-
-    operator_node = Node(token)
-    consume("=")
-    node.add_node(operator_node)
-
-    operator_node.add_node(identifier_node)
-
-    expression(operator_node)
-    consume(";")
-
-
-# --------------------------------------------------------
-#                   printStatement
-# --------------------------------------------------------
-@track
-def print_statement(node):
-    """
-printStatement      = "print" expression ";".
-    """
+def clear_statement(node):
     statement_node = Node(token)
-    consume("print")
-
+    consume("clear")
     node.add_node(statement_node)
-
-    expression(statement_node)
-
+    variable(statement_node)
     consume(";")
 
 
-# --------------------------------------------------------
-#                   stringExpression
-# --------------------------------------------------------
 @track
-def string_expression(node):
-    """
-/* "||" is the concatenation operator, as in PL/I */
-stringExpression =  (stringLiteral | variable) {"||" stringExpression}.
-    """
+def incr_statement(node):
+    statement_node = Node(token)
+    consume("incr")
+    node.add_node(statement_node)
+    variable(statement_node)
+    consume(";")
 
-    if found(STRING):
-        node.add(token)
-        get_token()
-
-        while found("||"):
-            get_token()
-            string_expression(node)
-    else:
-        node.add(token)
-        consume(IDENTIFIER)
-
-    while found("||"):
-        get_token()
-        string_expression(node)
-
-
-# --------------------------------------------------------
-#                   numberExpression
-# --------------------------------------------------------
 @track
-def number_expression(node):
-    """
-numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
-numberOperator = "+" | "-" | "/" | "*" .
-    """
-    if found(NUMBER):
-        number_literal(node)
-    else:
-        node.add(token)
-        consume(IDENTIFIER)
+def decr_statement(node):
+    statement_node = Node(token)
+    consume("decr")
+    node.add_node(statement_node)
+    variable(statement_node)
+    consume(";")
 
-    while found_one_of(numberOperator):
-        node.add(token)
-        get_token()
-        number_expression(node)
+@track
+def while_statement(node):
+    statement_node = Node(token)
+    consume("while")
+    node.add_node(statement_node)
+    variable(statement_node)
+    consume("not")
+    consume("Number")
+
+@track
+def do_statement(node):
+    statement_node = Node(token)
+    node.add_node(statement_node)
+    consume("do")
+    while not found("end"):
+        statement(statement_node)
+@track
+def end_statement(node):
+    statement_node = Node(token)
+    consume("end")
+    node.add_node(statement_node)
+    consume(";")
 
 
 # --------------------------------------------------------
 #                   stringLiteral
 # --------------------------------------------------------
-def string_literal(node):
+def variable(node):
+    token.type = "variable"
     node.add(token)
     get_token()
 
@@ -316,5 +244,6 @@ def string_literal(node):
 #                   numberLiteral
 # --------------------------------------------------------
 def number_literal(node):
+    token.type = "zero"
     node.add(token)
     get_token()

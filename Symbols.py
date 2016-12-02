@@ -3,17 +3,14 @@
 # a list of keywords
 # ----------------------------------------------------------
 Keywords = """
-if
-then
-else
-elif
-endif
 while
-loop
-endloop
-print
-return
-exit
+incr
+do
+decr
+clear
+end
+not
+0
 """
 Keywords = Keywords.split()
 
@@ -22,12 +19,7 @@ Keywords = Keywords.split()
 # a list of symbols that are one character long
 # ----------------------------------------------------------
 OneCharacterSymbols = """
-=
-( )
-< >
-/ * + -
-! &
-.  ;
+;
 """
 # fragment stop snippet1
 OneCharacterSymbols = OneCharacterSymbols.split()
@@ -37,17 +29,6 @@ OneCharacterSymbols = OneCharacterSymbols.split()
 # a list of symbols that are two characters long
 # ----------------------------------------------------------
 TwoCharacterSymbols = """
-==
-<=
->=
-<>
-!=
-++
-**
---
-+=
--=
-||
 """
 # fragment stop snippet1
 TwoCharacterSymbols = TwoCharacterSymbols.split()
