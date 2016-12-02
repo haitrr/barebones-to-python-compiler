@@ -1,5 +1,3 @@
-# fragment start *
-# fragment start 1
 from Scanner import *
 
 
@@ -13,21 +11,10 @@ class LexerError(Exception):
 #
 # -----------------------------------------------------------------------
 class Token(object):
-    """
-    A Token object is the kind of thing that the Lexer returns.
-    It holds:
-    - the text of the token (self.cargo)
-    - the type of token that it is
-    - the line number and column index where the token starts
-    """
-
     # -------------------------------------------------------------------
-    #
+    #               Constructor
     # -------------------------------------------------------------------
     def __init__(self, start_char):
-        """
-        The constructor of the Token class
-        """
         self.cargo = start_char.char
 
         # ----------------------------------------------------------
@@ -76,10 +63,6 @@ class Token(object):
 
     guts = property(show)
 
-    # fragment stop  1
-
-
-    # fragment start 2
     # -------------------------------------------------------------------
     #
     # -------------------------------------------------------------------
@@ -92,5 +75,3 @@ class Token(object):
                          + " " * self.colIndex
                          + "^\n\n"
                          + msg)
-
-# fragment stop 2

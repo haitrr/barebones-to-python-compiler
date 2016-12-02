@@ -1,8 +1,3 @@
-# fragment start *
-"""
-A lexer (aka: Tokenizer, Lexical Analyzer) for the imaginary language nxx
-"""
-# fragment start   lexer0
 from Scanner import Scanner
 from Token import *
 from Symbols import *
@@ -21,8 +16,6 @@ class Lexer:
     #
     # -------------------------------------------------------------------
     def __init__(self, source_text):
-        """
-        """
         # initialize the scanner with the sourceText
         self.scanner = Scanner(source_text)
         self.c1 = ''
@@ -37,7 +30,7 @@ class Lexer:
     # -------------------------------------------------------------------
     def get(self):
         """
-        Construct and return the next token in the sourceText.
+        Construct and return the next token in the source text.
         """
 
         # --------------------------------------------------------------------------------

@@ -1,12 +1,4 @@
-# fragment start *
-# fragment start 1
 from Character import *
-
-"""
-A Scanner object reads through the sourceText
-and returns one character at a time.
-"""
-
 
 # -------------------------------------------------------------------
 #
@@ -24,7 +16,7 @@ class Scanner:
     # -------------------------------------------------------------------
     def get(self):
         """
-        Return the next character in sourceText.
+        Return the next character in source text.
         """
 
         self.source_index += 1  # increment the index in source_text
@@ -33,9 +25,9 @@ class Scanner:
         if self.source_index > 0:
             if self.source_text[self.source_index - 1] == "\n":
                 # -------------------------------------------------------
-                # The previous character in sourceText was a newline
-                # character.  So... we're starting a new line.
-                # Increment lineIndex and reset colIndex.
+                # The previous character in source text was a newline
+                # character.Starting a new line.
+                # Increment line index and reset column index.
                 # -------------------------------------------------------
                 self.line_index += 1
                 self.column_index = -1
@@ -52,10 +44,6 @@ class Scanner:
 
         return char
 
-    # fragment stop  1
-
-
-    # fragment start 2
     # -------------------------------------------------------------------
     #
     # -------------------------------------------------------------------

@@ -1,4 +1,3 @@
-# fragment start *
 class Node:
     def __init__(self, token=None):
         self.token = token

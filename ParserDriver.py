@@ -12,7 +12,7 @@ def writeln(*args):
 
 
 if __name__ == "__main__":
-    outputFilename = "barebones_to_python_ouput.txt"
+    outputFilename = "barebones_to_python_ouput.py"
     sourceFilename = "barebones_source_code.txt"
     source_text = open(sourceFilename).read()
     ast = parser.parse(source_text, verbose=False)

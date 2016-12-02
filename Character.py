@@ -1,5 +1,4 @@
-# fragment start *
-ENDMARK = "\0"  # aka "lowvalues"
+ENDMARK = "\0"
 
 
 # -----------------------------------------------------------------------
@@ -23,12 +22,9 @@ class Character:
     """
 
     # -------------------------------------------------------------------
-    #
+    #               Constructor
     # -------------------------------------------------------------------
     def __init__(self, char, line_index, column_index, source_index, source_text):
-        """
-        In Python, the __init__ method is the constructor.
-        """
         self.char = char
         self.sourceIndex = source_index
         self.line_index = line_index
@@ -39,10 +35,6 @@ class Character:
     # return a displayable string representation of the Character object
     # -------------------------------------------------------------------
     def __str__(self):
-        """
-        In Python, the __str__ method returns a string representation
-        of an object.  In Java, this would be the toString() method.
-        """
         cargo = self.char
         if cargo == " ":
             cargo = "   space"

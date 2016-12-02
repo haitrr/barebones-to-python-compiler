@@ -1,7 +1,6 @@
 # fragment start *
 """
-A recursive descent parser for nxx1, 
-as defined in nxx1ebnf.txt
+A recursive descent parser for Baresbone language
 """
 from Lexer import Lexer
 from Symbols import *
@@ -88,10 +87,9 @@ def error(msg):
 # -------------------------------------------------------------------
 def found_one_of(arg_token_types):
     """
-    argTokenTypes should be a list of argTokenType
+    arg_token_types is a list of token type
     """
     for arg_token_type in arg_token_types:
-        # print "foundOneOf", argTokenType, token.type
         if token.type == arg_token_type:
             return True
     return False
@@ -118,9 +116,9 @@ def consume(arg_token_type):
     if token.type == arg_token_type:
         get_token()
     else:
-        error("I was expecting to find "
+        error("Expecting to find "
               + dq(arg_token_type)
-              + " but I found "
+              + " but found "
               + token.show(align=False)
               )
 
@@ -148,7 +146,7 @@ def parse(source_text, **kwargs):
 @track0
 def program():
     """
-program = statement {statement} EOF.
+    program = statement {statement} EOF.
     """
     global ast
     node = Node()
@@ -181,7 +179,9 @@ def statement(node):
     else:
         pass
 
-
+# --------------------------------------------------------
+#                   clear statement
+# --------------------------------------------------------
 @track
 def clear_statement(node):
     statement_node = Node(token)
@@ -191,6 +191,9 @@ def clear_statement(node):
     consume(";")
 
 
+# --------------------------------------------------------
+#                   increase statement
+# --------------------------------------------------------
 @track
 def incr_statement(node):
     statement_node = Node(token)
@@ -199,6 +202,9 @@ def incr_statement(node):
     variable(statement_node)
     consume(";")
 
+# --------------------------------------------------------
+#                   decrease statement
+# --------------------------------------------------------
 @track
 def decr_statement(node):
     statement_node = Node(token)
@@ -207,6 +213,9 @@ def decr_statement(node):
     variable(statement_node)
     consume(";")
 
+# --------------------------------------------------------
+#                   while loop statement
+# --------------------------------------------------------
 @track
 def while_statement(node):
     statement_node = Node(token)
@@ -216,6 +225,9 @@ def while_statement(node):
     consume("not")
     consume("Number")
 
+# --------------------------------------------------------
+#                   do statement
+# --------------------------------------------------------
 @track
 def do_statement(node):
     statement_node = Node(token)
@@ -223,6 +235,10 @@ def do_statement(node):
     consume("do")
     while not found("end"):
         statement(statement_node)
+
+# --------------------------------------------------------
+#                   end statement
+# --------------------------------------------------------
 @track
 def end_statement(node):
     statement_node = Node(token)
@@ -232,7 +248,7 @@ def end_statement(node):
 
 
 # --------------------------------------------------------
-#                   stringLiteral
+#                   variable
 # --------------------------------------------------------
 def variable(node):
     token.type = "variable"
@@ -241,7 +257,7 @@ def variable(node):
 
 
 # --------------------------------------------------------
-#                   numberLiteral
+#                   number
 # --------------------------------------------------------
 def number_literal(node):
     token.type = "zero"

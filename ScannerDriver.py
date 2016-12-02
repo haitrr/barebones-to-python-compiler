@@ -1,6 +1,5 @@
-# fragment start *
-import Scanner as scanner
-
+from Scanner import Scanner
+import Character
 
 # -------------------------------------------
 # support for writing output to a file
@@ -25,7 +24,7 @@ def main(sourceText):
     writeln("  line col  character")
 
     # create a scanner (an instance of the Scanner class)
-    scanner.initialize(sourceText)
+    scanner = Scanner(sourceText)
 
     # ------------------------------------------------------------------
     # Call the scanner's get() method repeatedly
@@ -35,7 +34,7 @@ def main(sourceText):
     character = scanner.get()  # getfirst Character object from the scanner
     while True:
         writeln(character)
-        if character.cargo == scanner.ENDMARK: break
+        if character.char == Character.ENDMARK: break
         character = scanner.get()  # getnext
     # fragment stop core
 
@@ -46,8 +45,8 @@ def main(sourceText):
 #              run
 # -----------------------------------------
 if __name__ == "__main__":
-    outputFilename = "output\\genericScannerDriver_output.txt"
-    source_text = open("input\\nxx1.txt").read()
+    outputFilename = "barebones_to_python_ouput.py"
+    sourceFilename = "barebones_source_code.txt"
+    source_text = open(sourceFilename).read()
     main(source_text)
-    print
-    open(outputFilename).read()
+    print(open(outputFilename).read())
