@@ -9,15 +9,10 @@ print(50*"~")
 print(ast.to_string())
 print(50*"~")
 result = Interpreter.interpreter(ast)
-input_code = ""
-output_code=""
-Interpreter.get_variable(ast)
-for i in Interpreter.input_variables:
-    input_code += "print(\"Please input "+ i+" :\") \n"
-    input_code+= i +" =int(input())"+"\n"
-for i in Interpreter.all_variable:
-    output_code+="print(\"Value of  " +i+" : \" + str("+i+")) \n"
-result=input_code+result+output_code
+Interpreter.get_variable()
+input_code = Interpreter.require_input()
+output_code=Interpreter.output_variables()
+result= Interpreter.define_subtract() + input_code+result+output_code
 f = open(outputFilename, "w")
 f.write(result)
 f.close()

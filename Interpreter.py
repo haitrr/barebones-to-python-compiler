@@ -16,8 +16,13 @@ def get_variable(node):
                 if temp not in all_variable:
                     all_variable.append(temp)
 
+def define_subtract():
+    subtract = "def subtract(i):\n    if i>0 :\n        i-=1\n    return i\n"
+    return subtract
 
 def interpreter(ast, level=-1):
+    input_variables.clear()
+    all_variable.clear()
     result = ""
     if ast.token is not None:
         if ast.token.type == "incr":
@@ -47,7 +52,7 @@ def incr(node, level):
 
 def decr(node, level):
     variable = node.children[0].token.cargo
-    result = variable + " -= 1"
+    result = variable + " = "+"subtract("+ variable +")"
     return result
 
 
@@ -65,3 +70,16 @@ def while_loop(node, level):
 
 def end(node, level):
     return (level - 1) * "    "
+
+def require_input():
+    input_code = ""
+    for i in input_variables:
+        input_code += "print(\"Please input " + i + " :\") \n"
+        input_code += i + " =int(input())" + "\n"
+    return input_code
+
+def output_variables():
+    output_code=""
+    for i in all_variable:
+        output_code += "print(\"Value of  " + i + " : \" + str(" + i + ")) \n"
+    return output_code

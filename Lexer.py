@@ -1,4 +1,3 @@
-from Scanner import Scanner
 from Token import *
 from Symbols import *
 
@@ -142,7 +141,7 @@ class Lexer:
         # fragment stop getsymbols
 
         # else.... We have encountered something that we don't recognize.
-        token.abort("I found a self.character or symbol that I do not recognize: " + self.dq(self.c1))
+        token.abort("Found a character or symbol that I do not recognize: " + self.dq(self.c1))
 
     # fragment stop snippet1
 

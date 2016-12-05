@@ -1,6 +1,4 @@
 from Scanner import *
-
-
 class LexerError(Exception):
     pass
 
@@ -19,7 +17,7 @@ class Token(object):
 
         # ----------------------------------------------------------
         # The token picks up information
-        # about its location in the sourceText
+        # about its location in the source_text
         # ----------------------------------------------------------
         self.sourceText = start_char.source_text
         self.lineIndex = start_char.line_index
@@ -54,7 +52,7 @@ class Token(object):
             s = ""
 
         if self.type == self.cargo:
-            s = s + "Symbol".ljust(token_type_len, ".") + ":" + space + self.type
+            s = s + " : " + space + self.type
         elif self.type == "Whitespace":
             s = s + "Whitespace".ljust(token_type_len, ".") + ":" + space + repr(self.cargo)
         else:
@@ -75,3 +73,4 @@ class Token(object):
                          + " " * self.colIndex
                          + "^\n\n"
                          + msg)
+

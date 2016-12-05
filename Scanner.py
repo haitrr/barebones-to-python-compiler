@@ -52,8 +52,6 @@ class Scanner:
         Return a string (not a Character object) containing the character
         at position:
                 sourceIndex + offset
-        Note that we do NOT move our current position in the sourceText.
-        That is,  we do NOT change the value of sourceIndex.
         """
         index = self.source_index + offset
 

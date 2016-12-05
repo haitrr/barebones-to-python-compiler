@@ -172,12 +172,10 @@ def statement(node):
         decr_statement(node)
     elif found("while"):
         while_statement(node)
-    elif found("end"):
-        end_statement(node)
     elif found("do"):
         do_statement(node)
     else:
-        pass
+        error("Didn't reconize " + token.show())
 
 # --------------------------------------------------------
 #                   clear statement
@@ -224,6 +222,7 @@ def while_statement(node):
     variable(statement_node)
     consume("not")
     consume("Number")
+    do_statement(node)
 
 # --------------------------------------------------------
 #                   do statement
@@ -231,26 +230,26 @@ def while_statement(node):
 @track
 def do_statement(node):
     statement_node = Node(token)
-    node.add_node(statement_node)
     consume("do")
+    node.add_node(statement_node)
     while not found("end"):
+        if found(EOF):
+            error("Expecting \"end\"")
         statement(statement_node)
+    consume("end")
+    consume(";")
 
 # --------------------------------------------------------
 #                   end statement
 # --------------------------------------------------------
-@track
-def end_statement(node):
-    statement_node = Node(token)
-    consume("end")
-    node.add_node(statement_node)
-    consume(";")
 
 
 # --------------------------------------------------------
 #                   variable
 # --------------------------------------------------------
 def variable(node):
+    if token.cargo[0] not in string.ascii_letters:
+        error("Variable can not start with degits")
     token.type = "variable"
     node.add(token)
     get_token()
