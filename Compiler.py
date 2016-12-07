@@ -1,7 +1,9 @@
 input_variables = []
 all_variable = []
 
-
+# -------------------------------------------------------------------
+#                       Get all the variable and input variable
+# -------------------------------------------------------------------
 def get_variable(node):
     if node.token is not None and node.token.type == "variable":
         return node.token.cargo
@@ -17,12 +19,17 @@ def get_variable(node):
                 if temp not in all_variable:
                     all_variable.append(temp)
 
-
+# -------------------------------------------------------------------
+#                       Subtract function for barebones
+# -------------------------------------------------------------------
 def define_subtract():
     subtract = "def subtract(variable,num=1):\n    variable = variable - num\n    if variable<0 :\n        variable=0\n    return variable\n"
     return subtract
 
 
+# -------------------------------------------------------------------
+#                       Compile
+# -------------------------------------------------------------------
 def compile(ast, level=-1):
     input_variables.clear()
     all_variable.clear()
@@ -43,7 +50,9 @@ def compile(ast, level=-1):
     return result
 
 
-
+# -------------------------------------------------------------------
+#                       INCR
+# -------------------------------------------------------------------
 def incr(node):
     variable = node.children[0].token.cargo
     if len(node.children)>1:
@@ -52,7 +61,9 @@ def incr(node):
         result = variable + " += 1"
     return result
 
-
+# -------------------------------------------------------------------
+#                       DECR
+# -------------------------------------------------------------------
 def decr(node):
     variable = node.children[0].token.cargo
     if len(node.children)>1:
@@ -61,20 +72,26 @@ def decr(node):
         result = variable + " = " + "subtract(" + variable + ")"
     return result
 
-
+# -------------------------------------------------------------------
+#                       CLEAR
+# -------------------------------------------------------------------
 def clear(node):
     variable = node.children[0].token.cargo
     result = variable + " = 0"
     return result
 
-
+# -------------------------------------------------------------------
+#                       WHILE
+# -------------------------------------------------------------------
 def while_loop(node):
     variable = node.children[0].token.cargo
     result = "while " + variable + " != 0:"
     return result
 
 
-
+# -------------------------------------------------------------------
+#                  Generate require output code
+# -------------------------------------------------------------------
 def require_input():
     input_code = ""
     for i in input_variables:
@@ -83,6 +100,9 @@ def require_input():
     return input_code
 
 
+# -------------------------------------------------------------------
+#            Print all variables after finish running
+# -------------------------------------------------------------------
 def output_variables():
     output_code = ""
     for i in all_variable:

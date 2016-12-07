@@ -77,23 +77,10 @@ def track(func):
 
 
 # -------------------------------------------------------------------
-#
+#                       Error
 # -------------------------------------------------------------------
 def error(msg):
     token.abort(msg)
-
-
-# -------------------------------------------------------------------
-#        foundOneOf
-# -------------------------------------------------------------------
-def found_one_of(arg_token_types):
-    """
-    arg_token_types is a list of token type
-    """
-    for arg_token_type in arg_token_types:
-        if token.type == arg_token_type:
-            return True
-    return False
 
 
 # -------------------------------------------------------------------
