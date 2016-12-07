@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BareBonesInterpreter.iml" filepath="$PROJECT_DIR$/.idea/BareBonesInterpreter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../BareBonesCompiler/.idea/BareBonesCompiler.iml" filepath="$PROJECT_DIR$/../BareBonesCompiler/.idea/BareBonesCompiler.iml" />
     </modules>
   </component>
 </project>
