@@ -19,7 +19,7 @@ def get_variable(node):
 
 
 def define_subtract():
-    subtract = "def subtract(i):\n    if i>0 :\n        i-=1\n    return i\n"
+    subtract = "def subtract(variable,num=1):\n    variable = variable - num\n    if variable<0 :\n        variable=0\n    return variable\n"
     return subtract
 
 
@@ -29,50 +29,50 @@ def compile(ast, level=-1):
     result = ""
     if ast.token is not None:
         if ast.token.type == "incr":
-            result += level * "    " + incr(ast, level) + "\n"
+            result += level * "    " + incr(ast) + "\n"
         elif ast.token.type == "decr":
-            result += level * "    " + decr(ast, level) + "\n"
+            result += level * "    " + decr(ast) + "\n"
         elif ast.token.type == "clear":
-            result += level * "    " + clear(ast, level) + "\n"
+            result += level * "    " + clear(ast) + "\n"
         elif ast.token.type == "while":
-            result += level * "    " + while_loop(ast, level) + "\n"
-        elif ast.token.type == "do":
+            result += level * "    " + while_loop(ast) + "\n"
+        else:
             pass
     for i in ast.children:
         result += compile(i, level + 1)
     return result
 
 
-def do(node, level):
-    return ""
 
-
-def incr(node, level):
+def incr(node):
     variable = node.children[0].token.cargo
-    result = variable + " += 1"
+    if len(node.children)>1:
+        result = variable + " += "+node.children[1].token.cargo
+    else:
+        result = variable + " += 1"
     return result
 
 
-def decr(node, level):
+def decr(node):
     variable = node.children[0].token.cargo
-    result = variable + " = " + "subtract(" + variable + ")"
+    if len(node.children)>1:
+        result = variable + " = " + "subtract(" + variable + ", " +node.children[1].token.cargo+ ")"
+    else:
+        result = variable + " = " + "subtract(" + variable + ")"
     return result
 
 
-def clear(node, level):
+def clear(node):
     variable = node.children[0].token.cargo
     result = variable + " = 0"
     return result
 
 
-def while_loop(node, level):
+def while_loop(node):
     variable = node.children[0].token.cargo
     result = "while " + variable + " != 0:"
     return result
 
-
-def end(node, level):
-    return (level - 1) * "    "
 
 
 def require_input():

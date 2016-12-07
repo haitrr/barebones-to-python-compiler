@@ -1,14 +1,84 @@
-print("Please input X :") 
-X =int(input())
-Y = 0
-Temp = 0
-while X != 0:
-    Y += 1
-    Temp += 1
-    X -= 1
-while Temp != 0:
-    X += 1
-    Temp -= 1
-print("Value of  Y : " + str(Y)) 
-print("Value of  Temp : " + str(Temp)) 
-print("Value of  X : " + str(X)) 
+ROOT
+    clear
+        Z
+    incr
+        Z
+    clear
+        i
+        incr
+            i
+            n
+        clear
+            Z1
+        clear
+            tmpZ
+            incr
+                Z1
+                Z
+            n
+            decr
+                Z
+                Z
+            n
+            incr
+                tmpZ
+                Z
+            n
+        clear
+            Z
+        clear
+            tmpZ1
+            clear
+                tmpI
+                incr
+                    Z
+                    i
+                Z1
+            n
+                decr
+                    i
+                    i
+                Z1
+            n
+                incr
+                    tmpI
+                    i
+                Z1
+            n
+            decr
+                Z1
+                Z1
+            n
+            incr
+                tmpZ1
+                Z1
+            n
+                incr
+                    i
+                    tmpI
+                Z1
+            n
+                decr
+                    tmpI
+                    tmpI
+                Z1
+            n
+            incr
+                Z1
+                tmpZ1
+            n
+            decr
+                tmpZ1
+                tmpZ1
+            n
+            incr
+                i
+                tmpI
+            n
+            decr
+                tmpI
+                tmpI
+            n
+        decr
+            n
+            n

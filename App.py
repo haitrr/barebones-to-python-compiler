@@ -6,10 +6,11 @@ from subprocess import call
 from tkinter import filedialog
 
 
-def compile():
+def compile(ast=None):
     compiled_code_text_box.config(state=NORMAL)
     try:
-        ast = Parser.parse(source_code_text_box.get(1.0, END), verbose=False)
+        if ast is None:
+            ast = Parser.parse(source_code_text_box.get(1.0, END), verbose=False)
     except Exception as e:
         compiled_code_text_box.delete(1.0, END)
         compiled_code_text_box.insert(INSERT, e)
@@ -28,6 +29,10 @@ def compile():
     finally:
         compiled_code_text_box.config(state=DISABLED)
 
+def optimize():
+    ast = Parser.parse(source_code_text_box.get(1.0, END), verbose=False)
+    Parser.optimize(ast)
+    compile(ast)
 
 def save_result(text):
     file = open("temp.py", 'w')
@@ -54,9 +59,11 @@ open_file_button = Button(root, text="Open", command=get_input)
 open_file_button.grid(row=0, column=0)
 run_button = Button(root, text="Run", command=run)
 run_button.config(state=DISABLED)
-run_button.grid(row=3, column=0, columnspan=2)
-compiler_button = Button(root, text="Compile", command=compiler)
+run_button.grid(row=3, column=0)
+compiler_button = Button(root, text="Compile", command=compile)
 compiler_button.grid(row=0, column=1)
+optimize_button = Button(root,text="Optimize",command = optimize)
+optimize_button.grid(row=3,column=1)
 source_code_lable = Label(root, text="Source code")
 source_code_lable.grid(row=1, column=0)
 compilered_code_lable = Label(root, text="Result")

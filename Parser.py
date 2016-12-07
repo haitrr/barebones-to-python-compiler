@@ -5,7 +5,8 @@ A recursive descent parser for Baresbone language
 from Lexer import Lexer
 from Symbols import *
 from Node import Node
-
+from Token import Token
+from Character import Character
 
 class ParserError(Exception):
     pass
@@ -262,3 +263,51 @@ def number_literal(node):
     token.type = "zero"
     node.add(token)
     get_token()
+
+def optimize(node,variable=None):
+    i = 0
+    count = 0
+    optmz=False
+    decr_node = None
+    while i < len(node.children):
+        if node.children[i].token.type=="do":
+            if optimize(node.children[i],node.children[i-1].children[0].token.cargo):
+                for t in range(0,len(node.children[i].children)):
+                    node.children.insert(i+1+t,node.children[i].children[t])
+                del node.children[i]
+                del node.children[i - 1]
+                i+=0
+            else:
+                i+=1
+        else:
+            i+=1
+    if variable is not None:
+        for j in node.children:
+            if j.token.type == "clear" or j.token.type=="while":
+                optmz=False
+                break
+            if j.children[0].token.cargo==variable:
+                if j.token.type == "decr":
+                    if count ==0:
+                        optmz=True
+                        count+=1
+                        decr_node=j
+                    else:
+                        optmz=False
+                else:
+                    optmz = False
+                    break
+        if optmz:
+            for j in node.children:
+                if j.token.type != "clear":
+                    j.children.append(decr_node.children[0])
+            temp_char = Character("a",1,1,None,None)
+            clear_variable_token = Token(temp_char)
+            clear_variable_token.type="clear"
+            clear_variable = Node(clear_variable_token)
+            clear_variable.children.append(decr_node.children[0])
+            node.children.append(clear_variable)
+            node.children.remove(decr_node)
+            return True
+        else:
+            return False

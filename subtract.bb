@@ -5,5 +5,5 @@ incr kq;
 end;
 while Y not 0 do
 decr Y;
-incr kq;
+decr kq;
 end;
