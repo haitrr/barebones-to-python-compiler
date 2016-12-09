@@ -16,17 +16,14 @@ class Token(object):
         self.cargo = start_char.char
 
         # ----------------------------------------------------------
-        # The token picks up information
-        # about its location in the source_text
+        # Location in the source_text
         # ----------------------------------------------------------
         self.sourceText = start_char.source_text
         self.lineIndex = start_char.line_index
         self.colIndex = start_char.column_index
 
         # ----------------------------------------------------------
-        # We won't know what kind of token we have until we have
-        # finished processing all of the characters in the token.
-        # So when we start, the token.type is None (aka null).
+        # Type of the token
         # ----------------------------------------------------------
         self.type = None
 
@@ -62,7 +59,7 @@ class Token(object):
     guts = property(show)
 
     # -------------------------------------------------------------------
-    #
+    #   Show error
     # -------------------------------------------------------------------
     def abort(self, msg):
         lines = self.sourceText.split("\n")

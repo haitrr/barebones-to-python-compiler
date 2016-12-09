@@ -1,6 +1,7 @@
 import Compiler
 import Parser as parser
 
+#--------------------------------------------TEST---------------------------------------------
 outputFilename = "barebones_to_python_ouput.py"
 sourceFilename = "barebones_source_code.txt"
 source_text = open(sourceFilename).read()

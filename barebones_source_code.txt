@@ -1,11 +1,11 @@
 clear Y;
 clear Temp;
-while X not 0 do
+while X not 0 do;
 	incr Y;
 	incr Temp;
 	decr X;
-end
-while Temp not 0 do
+end;
+while Temp not 0 do;
 	incr X;
 	decr Temp;
 end;

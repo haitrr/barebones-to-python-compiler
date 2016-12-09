@@ -12,7 +12,7 @@ class Character:
     # -------------------------------------------------------------------
     def __init__(self, char, line_index, column_index, source_index, source_text):
         self.char = char
-        self.sourceIndex = source_index
+        self.source_index = source_index
         self.line_index = line_index
         self.column_index = column_index
         self.source_text = source_text

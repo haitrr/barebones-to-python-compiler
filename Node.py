@@ -17,6 +17,7 @@ class Node:
         node.level = self.level + 1
         self.children.append(node)
 
+    # Return  a string represent the node
     def to_string(self):
         s = "    " * self.level
 

@@ -140,6 +140,8 @@ def program():
     node = Node()
 
     statement(node)
+
+    # Parse for statements until end of file
     while not found(EOF):
         statement(node)
 
@@ -160,9 +162,8 @@ def statement(node):
         decr_statement(node)
     elif found("while"):
         while_statement(node)
-    elif found("do"):
-        do_statement(node)
     else:
+        # Unexpected
         error("Didn't reconize " + token.show())
 
 # --------------------------------------------------------
@@ -170,10 +171,18 @@ def statement(node):
 # --------------------------------------------------------
 @track
 def clear_statement(node):
+    """
+    Syntax = clear + variable + ;
+    """
+
     statement_node = Node(token)
+
     consume("clear")
     node.add_node(statement_node)
+
+    # Parse next variable
     variable(statement_node)
+
     consume(";")
 
 
@@ -182,10 +191,18 @@ def clear_statement(node):
 # --------------------------------------------------------
 @track
 def incr_statement(node):
+    """
+        Syntax = incr + variable + ;
+    """
+
     statement_node = Node(token)
+
     consume("incr")
     node.add_node(statement_node)
+
+    #Parse next variable
     variable(statement_node)
+
     consume(";")
 
 # --------------------------------------------------------
@@ -193,10 +210,16 @@ def incr_statement(node):
 # --------------------------------------------------------
 @track
 def decr_statement(node):
+    """
+        Syntax = decr + variable + ;
+    """
     statement_node = Node(token)
     consume("decr")
     node.add_node(statement_node)
+
+    # Parse next variable
     variable(statement_node)
+
     consume(";")
 
 # --------------------------------------------------------
@@ -204,75 +227,97 @@ def decr_statement(node):
 # --------------------------------------------------------
 @track
 def while_statement(node):
+    """
+        Syntax = while + variable + not + 0 + do + ;
+        + list of statement
+        + end + ;
+    """
+
     statement_node = Node(token)
     consume("while")
     node.add_node(statement_node)
-    variable(statement_node)
-    consume("not")
-    consume("Number")
-    do_statement(node)
 
-# --------------------------------------------------------
-#                   do statement
-# --------------------------------------------------------
-@track
-def do_statement(node):
-    statement_node = Node(token)
+    # Parse next variable
+    variable(statement_node)
+
+    # Consume keywords
+    consume("not")
+    consume("Zero")
     consume("do")
-    node.add_node(statement_node)
-    while not found("end"):
-        if found(EOF):
-            error("Expecting \"end\"")
-        statement(statement_node)
-    consume("end")
     consume(";")
 
-# --------------------------------------------------------
-#                   end statement
-# --------------------------------------------------------
+    # Until find end consume all statement
+    while not found("end"):
 
+        # If there is no end keyword then raise an error
+        if found(EOF):
+            error("Expecting \"end\"")
+
+        # Add to children
+        statement(statement_node)
+
+    # Consume end keyword
+    consume("end")
+    consume(";")
 
 # --------------------------------------------------------
 #                   variable
 # --------------------------------------------------------
 def variable(node):
+
+    # Check if first character is degits
     if token.cargo[0] not in string.ascii_letters:
         error("Variable can not start with degits")
+
+
     token.type = "variable"
     node.add(token)
     get_token()
 
-
-# --------------------------------------------------------
-#                   number
-# --------------------------------------------------------
-def number_literal(node):
-    token.type = "zero"
-    node.add(token)
-    get_token()
-
+# Optimize the code
 def optimize(node,variable=None):
     i = 0
     count = 0
     optmz=False
     decr_node = None
+
+    # Recurse until find the final while loop
+    # The most inside while loop
     while i < len(node.children):
-        if node.children[i].token.type=="do":
-            if optimize(node.children[i],node.children[i-1].children[0].token.cargo):
-                for t in range(0,len(node.children[i].children)):
-                    node.children.insert(i+1+t,node.children[i].children[t])
+        if node.children[i].token.type == "while":
+
+            # Optimize
+            if optimize(node.children[i],node.children[i].children[0].token.cargo):
+
+                # Take all the children nodes outside of the loop
+                for t in range(1,len(node.children[i].children)):
+                    node.children.insert(i+t,node.children[i].children[t])
+
+                # Then delete it
                 del node.children[i]
-                del node.children[i - 1]
-                i+=0
             else:
-                i+=1
+                # Search for next child
+                i += 1
         else:
-            i+=1
+            i += 1
+
+    # Not the root tree
     if variable is not None:
+
+        # Check if there is only one decr statement in the loop that decrease the variable
+        # by 1 every loop
         for j in node.children:
+            if j.token.type == "variable":
+                continue
+
+            # If there are clear and while loop
+            # Can not optimize
+
             if j.token.type == "clear" or j.token.type=="while":
-                optmz=False
+                optmz = False
                 break
+
+            # Get the decr node
             if j.children[0].token.cargo==variable:
                 if j.token.type == "decr":
                     if count ==0:
@@ -284,15 +329,27 @@ def optimize(node,variable=None):
                 else:
                     optmz = False
                     break
+
+        # This node can be optimized
         if optmz:
+
+            # Add the variable to decr and incr node
             for j in node.children:
                 if j.token.type != "clear":
                     j.children.append(decr_node.children[0])
+                j.level -= 1
+                j.children[0].level-=1
+
+            # Add clear node to clear the variable of
+            # while loop
             temp_char = Character("a",1,1,None,None)
             clear_variable_token = Token(temp_char)
-            clear_variable_token.type="clear"
+            clear_variable_token.type = "clear"
+            clear_variable_token.cargo = "clear"
             clear_variable = Node(clear_variable_token)
             clear_variable.children.append(decr_node.children[0])
+            clear_variable.level=decr_node.level
+            decr_node.children[0].level+=1
             node.children.append(clear_variable)
             node.children.remove(decr_node)
             return True

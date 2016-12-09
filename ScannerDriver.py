@@ -15,38 +15,33 @@ def writeln(*args):
 #                    main
 #
 # -----------------------------------------------------------------------
-def main(sourceText):
+def main(source_text):
     global f
-    f = open(outputFilename, "w")  # open the ouput file
+    f = open(output_file_name, "w")  # open the ouput file
 
-    # fragment start core
     writeln("Here are the characters returned by the scanner:")
     writeln("  line col  character")
 
     # create a scanner (an instance of the Scanner class)
-    scanner = Scanner(sourceText)
+    scanner = Scanner(source_text)
 
     # ------------------------------------------------------------------
-    # Call the scanner's get() method repeatedly
-    # to get the characters in the sourceText.
-    # Stop when we reach the ENDMARK.
+    #               Scan all character in the source text
     # ------------------------------------------------------------------
-    character = scanner.get()  # getfirst Character object from the scanner
+    character = scanner.get()
     while True:
         writeln(character)
         if character.char == Character.ENDMARK: break
-        character = scanner.get()  # getnext
-    # fragment stop core
+        character = scanner.get()  # get next character
 
-    f.close()  # close the output file
-
+    f.close()
 
 # -----------------------------------------
 #              run
 # -----------------------------------------
 if __name__ == "__main__":
-    outputFilename = "barebones_to_python_ouput.py"
+    output_file_name = "barebones_to_python_ouput.py"
     sourceFilename = "barebones_source_code.txt"
     source_text = open(sourceFilename).read()
     main(source_text)
-    print(open(outputFilename).read())
+    print(open(output_file_name).read())
