@@ -18,7 +18,7 @@ if __name__ == "__main__":
     sourceFilename = "add.bb"
     source_text = open(sourceFilename).read()
     ast = parser.parse(source_text, verbose=False)
-    parser.optimize(ast)
+    #parser.optimize(ast)
     print("~" * 80)
     print("Here is the abstract syntax tree:")
     print("~" * 80)

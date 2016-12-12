@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 import Parser
 import Compiler
+import CodeOptimizer
+import SemanticErrorDetector
 from subprocess import call
 from tkinter import filedialog
 
@@ -15,6 +17,7 @@ def compile(ast=None):
     try:
         if ast is None:
             ast = Parser.parse(source_code_text_box.get(1.0, END), verbose=False)
+            SemanticErrorDetector.check_semantic_error(ast)
 
     # If there are compile errors display them out
     except Exception as e:
@@ -63,7 +66,7 @@ def compile(ast=None):
 def optimize():
     # Parse and optimize the syntax tree
     ast = Parser.parse(source_code_text_box.get(1.0, END), verbose=False)
-    Parser.optimize(ast)
+    CodeOptimizer.optimize(ast)
 
     # Compile
     compile(ast)

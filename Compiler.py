@@ -1,6 +1,7 @@
 input_variables = []
 all_variable = []
 
+import Parser
 
 # -------------------------------------------------------------------
 #                       Get all the variable and input variable
@@ -170,3 +171,4 @@ def pre_declare_variables():
         code += i + " = 0\n"
 
     return code
+
